@@ -34,6 +34,7 @@ public class App {
             ResultSetMetaData metaData = resultSet.getMetaData();
             printMetaData(metaData);
 
+            resultSet.close();
             statement.close();
             connectDB().close();
 
