@@ -1,16 +1,18 @@
 package firstJPA;
 
 import firstJPA.dao.PersonDao;
-import firstJPA.domain.Gender;
+import firstJPA.domain.Department;
 import firstJPA.domain.Person;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 
 import javax.persistence.EntityManager;
 import javax.persistence.Persistence;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import static firstJPA.domain.Gender.*;
+import static firstJPA.domain.Gender.MALE;
+import static firstJPA.domain.HairColor.BLACK;
+import static firstJPA.domain.HairColor.BROWN;
 
 public class App {
 
@@ -19,23 +21,39 @@ public class App {
     }
 
     private void start() {
+        Logger log = LoggerFactory.getLogger(App.class);
+        log.debug("Starting application.");
+        log.error("Log file test");
+        log.info("Info test");
+
         EntityManager em = Persistence.createEntityManagerFactory("MySQL").createEntityManager();
 
         PersonDao dao = new PersonDao(em);
 
-        dao.insert(new Person("Bert", 34, MALE));
+//        dao.insert(new Person("Bert", 34, MALE));
 //        dao.insert(new Person("Jannie", 67, FEMALE));
-//        dao.insert(new Person("Herbert", 32, UNKNOWN));
+        dao.insert(new Person("Bertrand", 55, MALE, true));
 
-        List<Person> personList = dao.getAll();
-        List<Person> bertList = dao.getByName("Bert");
+        log.info("Get all ------------------------");
+        dao.getAll().forEach(p -> log.info(p.toString()));
 
-        for (Person person : bertList) {
-            System.out.println(person.getName() + " " + person.getAge());
-        }
+        log.info("Get all by name-----------------");
+        dao.getAll("Bertrand").forEach(p -> log.info(p.toString()));
 
+//        dao.delete(8);
+
+        dao.updateName(7, "Frits");
+
+        log.info("Get by Id ----------------------");
         Person person = dao.getById(7);
-        System.out.printf("Name: %s \nAge: %d \nGender: %s",
-                person.getName(), person.getAge(), person.getGender());
+        log.info(person.toString());
+
+        log.info("Update full person -------------");
+        person.setName("Freek");
+        person.setAge(103);
+        person.setEmployedAt(new Department("Gebouwbeheer"));
+        person.setHairColor(BLACK);
+        Person updated = dao.update(person);
+        log.info(updated.toString());
     }
 }
