@@ -2,6 +2,7 @@ package firstJPA;
 
 import firstJPA.dao.PersonDao;
 import firstJPA.domain.Department;
+import firstJPA.domain.Laptop;
 import firstJPA.domain.Person;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -12,7 +13,6 @@ import javax.persistence.Persistence;
 
 import static firstJPA.domain.Gender.MALE;
 import static firstJPA.domain.HairColor.BLACK;
-import static firstJPA.domain.HairColor.BROWN;
 
 public class App {
 
@@ -53,7 +53,12 @@ public class App {
         person.setAge(103);
         person.setEmployedAt(new Department("Gebouwbeheer"));
         person.setHairColor(BLACK);
+        person.setEmail("Email@test.com");
+        person.addLaptop(new Laptop("DELL"));
+        person.addLaptop(new Laptop("HP"));
+
         Person updated = dao.update(person);
         log.info(updated.toString());
+
     }
 }

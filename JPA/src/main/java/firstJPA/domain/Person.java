@@ -3,6 +3,13 @@ package firstJPA.domain;
 import firstJPA.dao.BooleanTFConverter;
 
 import javax.persistence.*;
+import javax.validation.constraints.Email;
+import javax.validation.constraints.Size;
+import java.util.ArrayList;
+import java.util.List;
+
+import static javax.persistence.CascadeType.ALL;
+import static javax.persistence.CascadeType.MERGE;
 
 @NamedQueries({
         @NamedQuery(name = "getAll", query = "SELECT p FROM Person p"),
@@ -16,16 +23,25 @@ public class Person {
     @GeneratedValue
     @Column(name = "personId")
     private int id;
+
+    @Size(max = 20)
     private String name;
     private int age;
+
     @Enumerated
     private Gender gender;
 
     @Convert(converter = BooleanTFConverter.class)
     boolean human;
 
-    @ManyToOne(cascade = CascadeType.ALL)
+    @Email
+    String email;
+
+    @ManyToOne(cascade = ALL)
     private Department employedAt;
+
+    @OneToMany(cascade = MERGE, mappedBy = "owner")
+    private List<Laptop> laptops = new ArrayList<>();
 
     @Enumerated(EnumType.STRING)
     private HairColor hairColor;
@@ -37,6 +53,10 @@ public class Person {
         this.age = age;
         this.gender = gender;
         this.human = human;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
     }
 
     public String getName() {
@@ -57,6 +77,11 @@ public class Person {
 
     public void setHairColor(HairColor haircolor) {
         this.hairColor = haircolor;
+    }
+
+    public void addLaptop(Laptop lp) {
+        this.laptops.add(lp);
+        lp.setOnwer(this);
     }
 
     @Override
