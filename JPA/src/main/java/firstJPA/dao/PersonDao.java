@@ -1,19 +1,17 @@
 package firstJPA.dao;
 
-import SQLPlayground.DAO.PersonDAO;
 import firstJPA.domain.Person;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import javax.persistence.EntityManager;
-import javax.persistence.TypedQuery;
 import java.util.List;
 
 
 public class PersonDao {
 
 
-    private Logger log = LoggerFactory.getLogger(PersonDAO.class);
+    private Logger log = LoggerFactory.getLogger(PersonDao.class);
     private final EntityManager em;
 
     public PersonDao(EntityManager em) {
@@ -45,7 +43,7 @@ public class PersonDao {
 
 //        Using named query
         return em.createNamedQuery("getAllByName", Person.class)
-                .setParameter("name" , name)
+                .setParameter("name", name)
                 .getResultList();
 
 //        Using normal query
@@ -63,6 +61,10 @@ public class PersonDao {
         em.getTransaction().commit();
     }
 
+    public void detach(Person p) {
+        em.detach(p);
+    }
+
     public void delete(Person p) {
         em.getTransaction().begin();
         em.remove(p);
@@ -70,14 +72,37 @@ public class PersonDao {
     }
 
     public void updateName(int id, String name) {
-        log.debug("Changing name of person: " + id + " to: " + name);
         Person person = em.find(Person.class, id);
+        log.info("Changing name of person: " + id + " to: " + name);
         em.getTransaction().begin();
         person.setName(name);
         em.getTransaction().commit();
     }
 
+    // Note on managed entities, merge() and transactions
+    /* Using merge() in update(Person p) is not strictly necessary, since the entity (p)
+       is still in managed state. In fact, even getTransaction is not
+       necessary, as long as at some point before the application ends a transaction is
+       began and committed. But doing it like this is much cleaner, of course.
+
+       Why is this the case?
+       Most likely because managed entities are directly linked to their
+       respective rows in the database. Any changes to these entities (or in de DB)
+       are automatically sent to the DB. However, these changes still have to be
+       committed in a transaction to make them permanent. So strictly speaking
+       you only need one transaction for the entire application, which will
+       commit/save all the changes to the DB. Of course, this is, for multiple reasons
+       a very bad idea. But it is possible. */
+
     public Person update(Person p) {
+        log.info("Updating person, person is managed: " + em.contains(p));
+        em.getTransaction().begin();
+        Person merged = em.merge(p);
+        em.getTransaction().commit();
+        return merged;
+    }
+
+    public Person insertDetached(Person p) {
         em.getTransaction().begin();
         Person merged = em.merge(p);
         em.getTransaction().commit();

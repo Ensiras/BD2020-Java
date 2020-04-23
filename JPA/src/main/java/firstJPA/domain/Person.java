@@ -4,6 +4,7 @@ import firstJPA.dao.BooleanTFConverter;
 
 import javax.persistence.*;
 import javax.validation.constraints.Email;
+import javax.validation.constraints.Max;
 import javax.validation.constraints.Size;
 import java.util.ArrayList;
 import java.util.List;
@@ -26,6 +27,8 @@ public class Person {
 
     @Size(max = 20)
     private String name;
+
+    @Max(value = 100)
     private int age;
 
     @Enumerated
