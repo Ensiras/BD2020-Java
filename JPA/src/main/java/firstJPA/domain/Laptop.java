@@ -13,6 +13,8 @@ public class Laptop {
     @Id @GeneratedValue
     int id;
     String brand;
+
+    // Owning side of the relationship (has foreign key in its table)
     @ManyToOne(cascade = MERGE)
     Person owner;
 
