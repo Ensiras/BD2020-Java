@@ -13,6 +13,7 @@ import java.util.List;
 
 import static javax.persistence.CascadeType.ALL;
 import static javax.persistence.CascadeType.MERGE;
+import static javax.persistence.EnumType.*;
 import static javax.persistence.FetchType.LAZY;
 import static javax.persistence.TemporalType.DATE;
 
@@ -45,7 +46,7 @@ public class Person {
     @Email
     String email;
 
-    @Enumerated(EnumType.STRING)
+    @Enumerated(STRING)
     private HairColor hairColor;
 
     @Temporal(DATE)

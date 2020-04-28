@@ -36,7 +36,8 @@ public class App {
         dao.getAll().forEach(p -> log.info(p.toString()));
 
         log.info("Get all by name-----------------");
-        dao.getAll("Freek").forEach(p -> log.info(p.toString()));
+        List<Person> freek = dao.getAll("Freek");
+        freek.forEach(p -> log.info(p.toString()));
 
         log.info("Get by Id ----------------------");
         Person person = dao.getById(7);
