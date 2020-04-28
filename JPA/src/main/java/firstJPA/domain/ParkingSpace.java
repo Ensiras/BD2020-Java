@@ -8,6 +8,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Entity
+
 public class ParkingSpace {
 
     @Id
@@ -22,5 +23,9 @@ public class ParkingSpace {
 
     public ParkingSpace(int id) {
         this.id = id;
+    }
+
+    public void add(Person person) {
+        this.persons.add(person);
     }
 }

@@ -6,6 +6,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import javax.persistence.EntityManager;
 import javax.persistence.Persistence;
+import javax.persistence.Query;
 
 import java.util.Date;
 import java.util.List;
@@ -65,7 +66,18 @@ public class App {
 
         List<Person> persons = dao.getAll("Freek");
 
+        Person person1 = em.find(Person.class, 9);
+        person1.setEmployedAt(new Department("Het Frietkot"));
+        dao.update(person1);
 
+        Query query = em.createQuery("SELECT p.employedAt.name, p.name FROM Person p");
+        List<Object[]> resultList = query.getResultList();
+
+        Query query2 = em.createQuery("SELECT department.name, p.name FROM Person p LEFT OUTER JOIN p.employedAt department");
+        List<Object[]> resultList2 = query2.getResultList();
+
+        Query query3 = em.createQuery("SELECT d FROM Department d JOIN FETCH d.workers");
+        List<Object[]> resultList3 = query3.getResultList();
 
 
     }
@@ -94,6 +106,7 @@ public class App {
                 "let's see if it works like it should!");
         person.addPhone(new Phone("Samsung"));
         person.setParkingSpace(new ParkingSpace());
+        person.addDepartment(new Department("De ballentent"));
         return dao.update(person);
     }
 }

@@ -1,4 +1,4 @@
-package firstJPA.dao;
+package firstJPA.util;
 
 import javax.persistence.AttributeConverter;
 import javax.persistence.Converter;

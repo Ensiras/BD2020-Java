@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<persistence xmlns="http://xmlns.jcp.org/xml/ns/persistence"
+             xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+             xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/persistence
+             http://xmlns.jcp.org/xml/ns/persistence/persistence_2_2.xsd"
+             version="2.2">
+
+    <persistence-unit name="h2">
+        <provider>org.hibernate.jpa.HibernatePersistenceProvider</provider>
+        <class>firstJPA.domain.Person</class>
+        <class>firstJPA.domain.Department</class>
+        <class>firstJPA.domain.ParkingSpace</class>
+        <class>firstJPA.domain.Phone</class>
+        <class>firstJPA.domain.Laptop</class>
+        <class>firstJPA.domain.Car</class>
+
+
+        <properties>
+            <property name="javax.persistence.jdbc.driver" value="org.h2.Driver"/>
+            <property name="javax.persistence.jdbc.url" value="jdbc:h2:mem:testdb"/>
+            <!--            <property name="javax.persistence.jdbc.user" value="admin"/>
+                        <property name="javax.persistence.jdbc.password" value="testtest"/>-->
+            <property name="hibernate.hbm2ddl.auto" value="update"/>
+            <property name="hibernate.show_sql" value="true"/>
+            <property name="hibernate.format_sql" value="true"/>
+            <!--<property name="hibernate.connection.autocommit" value="false"/>-->
+        </properties>
+    </persistence-unit>
+
+</persistence>

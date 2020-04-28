@@ -1,9 +1,6 @@
 package firstJPA.domain;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
-import javax.persistence.ManyToMany;
+import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -15,6 +12,7 @@ public class Department {
     int id;
     String name;
 
+    // Bidirectional weak side
     @ManyToMany(mappedBy = "worksAtDepartments")
     private List<Person> workers = new ArrayList<>();
 
@@ -31,5 +29,9 @@ public class Department {
                 "id=" + id +
                 ", name='" + name + '\'' +
                 '}';
+    }
+
+    public void addWorker(Person p) {
+        this.workers.add(p);
     }
 }

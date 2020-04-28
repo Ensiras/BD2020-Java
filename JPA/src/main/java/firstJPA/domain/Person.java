@@ -1,6 +1,7 @@
 package firstJPA.domain;
 
-import firstJPA.dao.BooleanTFConverter;
+import firstJPA.util.BooleanTFConverter;
+import org.hibernate.annotations.Cascade;
 
 import javax.persistence.*;
 import javax.validation.constraints.Email;
@@ -9,12 +10,12 @@ import javax.validation.constraints.Size;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-import java.util.Set;
 
 import static javax.persistence.CascadeType.ALL;
 import static javax.persistence.CascadeType.MERGE;
 import static javax.persistence.FetchType.LAZY;
-import static javax.persistence.TemporalType.*;
+import static javax.persistence.TemporalType.DATE;
+
 
 @NamedQueries({
         @NamedQuery(name = "getAll", query = "SELECT p FROM Person p"),
@@ -44,9 +45,22 @@ public class Person {
     @Email
     String email;
 
+    @Enumerated(EnumType.STRING)
+    private HairColor hairColor;
+
+    @Temporal(DATE)
+    private Date dateOfEntry = new Date();
+
+    @Lob
+    @Basic(fetch = LAZY)
+    private String biography;
+
     // Field valued relationships --------------------
 
-    // Unidirectional, owning side
+    @OneToOne(cascade = ALL)
+    private Car leaseCar;
+
+    // Unidirectional, owning side. Linking table not necessary.
     @ManyToOne(cascade = ALL)
     private Department employedAt;
 
@@ -64,18 +78,35 @@ public class Person {
     @OneToMany(cascade = MERGE, mappedBy = "owner")
     private List<Laptop> laptops = new ArrayList<>();
 
-    //Bidirectional
-    @ManyToMany
-    private Set<Department> worksAtDepartments;
+    //Bidirectional, owning side
+    @ManyToMany(cascade = ALL)
+    @JoinTable(name = "workersDepartments")
+    private List<Department> worksAtDepartments;
 
-    @Enumerated(EnumType.STRING)
-    private HairColor hairColor;
+    public Person() {
+    }
 
-    @Temporal(DATE)
-    private Date dateOfEntry = new Date();
+    public Person(String name, int age, Gender gender, boolean human) {
+        this.name = name;
+        this.age = age;
+        this.gender = gender;
+        this.human = human;
+    }
 
-    @Lob @Basic(fetch = LAZY)
-    private String biography;
+    // Add new laptop to person and set its owner (needed to keep relationship symmetrical)
+    public void addLaptop(Laptop lp) {
+        this.laptops.add(lp);
+        lp.setOnwer(this);
+    }
+
+    public void addDepartment(Department department) {
+        this.worksAtDepartments.add(department);
+        department.addWorker(this);
+    }
+
+    public void addPhone(Phone p) {
+        phones.add(p);
+    }
 
     public ParkingSpace getParkingSpace() {
         return parkingSpace;
@@ -83,6 +114,7 @@ public class Person {
 
     public void setParkingSpace(ParkingSpace parkingSpace) {
         this.parkingSpace = parkingSpace;
+        parkingSpace.add(this);
     }
 
     public String getBiography() {
@@ -93,14 +125,6 @@ public class Person {
         this.biography = biography;
     }
 
-    public Person() {}
-
-    public Person(String name, int age, Gender gender, boolean human) {
-        this.name = name;
-        this.age = age;
-        this.gender = gender;
-        this.human = human;
-    }
 
     public Date getDateOfEntry() {
         return dateOfEntry;
@@ -134,14 +158,13 @@ public class Person {
         this.hairColor = haircolor;
     }
 
-    // Add new laptop to person and set its owner (needed to keep relationship symmetrical)
-    public void addLaptop(Laptop lp) {
-        this.laptops.add(lp);
-        lp.setOnwer(this);
+    public void setLeaseCar(Car leaseCar) {
+        this.leaseCar = leaseCar;
     }
 
-    public void addPhone(Phone p) {
-        phones.add(p);
+    @Cascade(value = org.hibernate.annotations.CascadeType.ALL)
+    public Car getLeaseCar() {
+        return leaseCar;
     }
 
     @Override
