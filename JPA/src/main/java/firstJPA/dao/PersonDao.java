@@ -14,10 +14,14 @@ public class PersonDao {
 
 
     private Logger log = LoggerFactory.getLogger(PersonDao.class);
-    private final EntityManager em;
+    private EntityManager em;
 
     public PersonDao(EntityManager em) {
         this.em = em;
+    }
+
+    public PersonDao() {
+
     }
 
     public void insert(Person person) {
@@ -28,12 +32,6 @@ public class PersonDao {
 
     public Person getById(int id) {
         return em.find(Person.class, id);
-    }
-
-    public Person getByIdDetached(int id) {
-        Person person = em.find(Person.class, id);
-        em.detach(person);
-        return person;
     }
 
     public List<Person> getAll() {
@@ -171,6 +169,4 @@ public class PersonDao {
 
     }
 
-
-    // TODO: lazy/eager fetch collections, right join
 }
