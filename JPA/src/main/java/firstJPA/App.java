@@ -30,7 +30,7 @@ public class App {
 
         PersonDao dao = new PersonDao(em);
 
-//        insertSomePersons(dao);
+        insertSomePersons(dao);
 
         Human human = new Human("Bob", 24, MALE, true, true);
         dao.insert(human);

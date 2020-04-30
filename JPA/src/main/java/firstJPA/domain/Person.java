@@ -1,12 +1,14 @@
 package firstJPA.domain;
 
 import firstJPA.util.BooleanTFConverter;
+import firstJPA.util.LocalDateTimeConverter;
 import org.hibernate.annotations.Cascade;
 
 import javax.persistence.*;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.Max;
 import javax.validation.constraints.Size;
+import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -63,6 +65,9 @@ public class Person {
 
     @Temporal(DATE)
     private Date dateOfEntry = new Date();
+
+    @Convert(converter = LocalDateTimeConverter.class)
+    private LocalTime dateOfBirth = LocalTime.now();
 
     @Lob
     @Basic(fetch = LAZY)
