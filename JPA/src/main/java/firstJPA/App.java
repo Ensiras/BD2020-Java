@@ -32,6 +32,9 @@ public class App {
 
 //        insertSomePersons(dao);
 
+        Human human = new Human("Bob", 24, MALE, true, true);
+        dao.insert(human);
+
         log.info("Get all ------------------------");
         dao.getAll().forEach(p -> log.info(p.toString()));
 

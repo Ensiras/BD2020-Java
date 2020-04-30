@@ -1,6 +1,10 @@
+package firstJPA;
+
 import firstJPA.dao.CarDao;
+import firstJPA.dao.EmployedRecord;
 import firstJPA.dao.PersonDao;
 import firstJPA.domain.Car;
+import firstJPA.domain.Department;
 import firstJPA.domain.Person;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
@@ -13,8 +17,9 @@ import java.util.List;
 import static firstJPA.domain.Gender.*;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertAll;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
-public class PersonDaoIT {
+public class PersonIT {
 
     EntityManager em;
     PersonDao dao;
@@ -131,11 +136,113 @@ public class PersonDaoIT {
         dao.updateName(1, "Bertus");
         Person afterChange = dao.getById(1);
 
-        assertThat(beforeChange.getName()).isEqualTo("Bert");
-        assertThat(afterChange.getName()).isEqualTo("Bertus");
+        assertAll("Updated name",
+                () -> assertThat(beforeChange.getName()).isEqualTo("Bert"),
+                () -> assertThat(afterChange.getName()).isEqualTo("Bertus")
+        );
     }
 
-    // TODO: testing more relationships
+    @Test
+    void whenGettingEmployedPersonsNewEmployedRecordsAreCreated() {
+        Person linda = new Person("Linda", 55, FEMALE, true);
+        Person x33 = new Person("X33", 6, UNKNOWN, false);
+        Person bert2 = new Person("Bert", 20, MALE, true);
 
+        bert.setEmployedAt(new Department("Binnentuin"));
+        bert2.setEmployedAt(new Department("De boom in"));
+        x33.setEmployedAt(new Department("Bijna ontslagen"));
 
+        dao.insert(bert);
+        dao.insert(x33);
+        dao.insert(bert2);
+        dao.insert(linda);
+        List<EmployedRecord> employedPersons = dao.getEmployedPersons();
+
+        assertThat(employedPersons.size()).isEqualTo(3);
+    }
+
+    @Test
+    void whenGettingPersonsAndDepartmentsAlsoUnemployedShouldBeIncluded() {
+        Person linda = new Person("Linda", 55, FEMALE, true);
+        Person x33 = new Person("X33", 6, UNKNOWN, false);
+        Person bert2 = new Person("Bert", 20, MALE, true);
+
+        bert.setEmployedAt(new Department("Binnentuin"));
+        bert2.setEmployedAt(new Department("De boom in"));
+        x33.setEmployedAt(new Department("Bijna ontslagen"));
+
+        dao.insert(bert);
+        dao.insert(x33);
+        dao.insert(bert2);
+        dao.insert(linda);
+        List<EmployedRecord> personsAndDepartments = dao.getPersonsAndDepartments();
+
+        assertThat(personsAndDepartments.size()).isEqualTo(4);
+    }
+
+    @Test
+    void whenGettingPersonsAndDepartmentsNonTypedResultsShouldBeTheSame() {
+        Person linda = new Person("Linda", 55, FEMALE, true);
+        Person x33 = new Person("X33", 6, UNKNOWN, false);
+        Person bert2 = new Person("Bert", 20, MALE, true);
+
+        bert.setEmployedAt(new Department("Binnentuin"));
+        bert2.setEmployedAt(new Department("De boom in"));
+        x33.setEmployedAt(new Department("Bijna ontslagen"));
+
+        dao.insert(bert);
+        dao.insert(x33);
+        dao.insert(bert2);
+        dao.insert(linda);
+        List<Object[]> PDNonTyped = dao.getPersonsAndDepartmentNonTyped();
+
+        assertThat(PDNonTyped.size()).isEqualTo(4);
+        assertThat(PDNonTyped.get(0)[0]).isEqualTo("Bert");
+    }
+
+    @Test
+    void whenSearchingForNameShouldReturnRecordsContainingThatName() {
+        Person bertus = new Person("Bertus", 20, MALE, true);
+        Person linda = new Person("Linda", 55, FEMALE, true);
+        Person janBert = new Person("Jan-Bert", 45, MALE, true);
+
+        dao.insert(bert);
+        dao.insert(bertus);
+        dao.insert(linda);
+        dao.detach(bert);
+        dao.insert(janBert);
+        List<Object[]> berts = dao.getAllByNameGuess("Bert");
+
+        assertThat(berts.size()).isEqualTo(3);
+    }
+
+    @Test
+    void prefixingAllNamesShouldBeDoneInBatches() {
+        Person bertus = new Person("Bertus", 20, MALE, true);
+        Person linda = new Person("Linda", 55, FEMALE, true);
+        Person janBert = new Person("Jan-Bert", 45, MALE, true);
+
+        dao.insert(bert);
+        dao.insert(bertus);
+        dao.insert(linda);
+        dao.insert(janBert);
+
+        dao.prefixAllNames("Prefixed!");
+
+        String name = dao.getById(1).getName();
+
+        assertThat(name).contains("Prefixed!");
+    }
+
+    @Test
+    void whenGettingByIdUsingCriteriaPersonsShouldBeReturned() {
+        dao.insert(bert);
+        dao.detach(bert);
+
+        List<Person> byIdCriteria = dao.getByIdCriteria(1);
+        Person person = byIdCriteria.get(0);
+
+        assertEquals(bert.getName(), person.getName());
+
+    }
 }

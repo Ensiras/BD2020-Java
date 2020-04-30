@@ -11,10 +11,10 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-import static javax.persistence.CascadeType.ALL;
-import static javax.persistence.CascadeType.MERGE;
-import static javax.persistence.EnumType.*;
+import static javax.persistence.CascadeType.*;
+import static javax.persistence.EnumType.STRING;
 import static javax.persistence.FetchType.LAZY;
+import static javax.persistence.InheritanceType.JOINED;
 import static javax.persistence.TemporalType.DATE;
 
 
@@ -23,7 +23,19 @@ import static javax.persistence.TemporalType.DATE;
         @NamedQuery(name = "getAllByName", query = "SELECT p FROM Person p WHERE p.name = :name")
 })
 
+@SqlResultSetMapping(name = "personResultShort", entities = {
+        @EntityResult(entityClass = Person.class, fields = {
+                @FieldResult(name = "id", column = "personId"),
+                @FieldResult(name = "name", column = "name"),
+                @FieldResult(name = "age", column = "age"),
+                @FieldResult(name = "gender", column = "gender"),
+                @FieldResult(name = "human", column = "human")
+        })
+})
+
+
 @Entity
+@Inheritance(strategy = JOINED)
 public class Person {
 
     @Id
@@ -72,7 +84,7 @@ public class Person {
     // Collection valued relationships ---------------
 
     // Unidirectional: forced to create linking table
-    @OneToMany(cascade = ALL)
+    @OneToMany(cascade = {MERGE, PERSIST}, fetch = LAZY)
     private List<Phone> phones = new ArrayList<>();
 
     // Bidirectional, passive side: foreign key field indicated by mappedBy.
@@ -107,6 +119,14 @@ public class Person {
 
     public void addPhone(Phone p) {
         phones.add(p);
+    }
+
+    public List<Phone> getPhones() {
+        return phones;
+    }
+
+    public void setPhones(List<Phone> phones) {
+        this.phones = phones;
     }
 
     public ParkingSpace getParkingSpace() {

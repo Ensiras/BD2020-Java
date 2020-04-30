@@ -5,8 +5,10 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import javax.persistence.EntityManager;
+import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Root;
 import java.util.List;
-
 
 public class PersonDao {
 
@@ -26,6 +28,12 @@ public class PersonDao {
 
     public Person getById(int id) {
         return em.find(Person.class, id);
+    }
+
+    public Person getByIdDetached(int id) {
+        Person person = em.find(Person.class, id);
+        em.detach(person);
+        return person;
     }
 
     public List<Person> getAll() {
@@ -108,4 +116,61 @@ public class PersonDao {
         em.getTransaction().commit();
         return merged;
     }
+
+    //  Lab 8 --------------------------------------------------------------------------------------
+
+    // Creating new instance inside query, note only people with a set employedAt field are included
+    // Similar to using just 'join'
+    public List<EmployedRecord> getEmployedPersons() {
+        return em.createQuery("SELECT new firstJPA.dao.EmployedRecord(p.name, p.employedAt.name) " +
+                "FROM Person p", EmployedRecord.class)
+                .getResultList();
+    }
+
+    // Due to left outer join also persons without an employedAt value are included
+    public List<EmployedRecord> getPersonsAndDepartments() {
+        return em.createQuery("SELECT new firstJPA.dao.EmployedRecord(p.name, p.employedAt.name)" +
+                "FROM Person p LEFT OUTER JOIN p.employedAt d", EmployedRecord.class).getResultList();
+    }
+
+    // Non-typed equivalent
+    @SuppressWarnings("unchecked")
+    public List<Object[]> getPersonsAndDepartmentNonTyped() {
+        return em.createQuery("SELECT p.name, d.name FROM Person p LEFT OUTER JOIN p.employedAt d")
+                .getResultList();
+    }
+
+    @SuppressWarnings("unchecked")
+    // Native get with mapping
+    public List<Object[]> getAllByNameGuess(String name) {
+        return em.createNativeQuery("SELECT personId, name, age, gender, human FROM person WHERE name LIKE ?")
+                .setParameter(1, "%" + name + "%")
+                .getResultList();
+    }
+
+    // Note: only works in tests (see persistence.xml properties)
+    public void prefixAllNames(String prefix) {
+        List<Person> allPersons = em.createQuery("SELECT p FROM Person p", Person.class).getResultList();
+        for (Person person : allPersons) {
+            person.setName(prefix + " " + person.getName());
+        }
+    }
+
+    public List<Person> getByIdCriteria(int id) {
+        CriteriaBuilder cb = em.getCriteriaBuilder();
+        CriteriaQuery<Person> query = cb.createQuery(Person.class);
+
+        // The from clause, also makes it typed
+        Root<Person> p =query.from(Person.class);
+
+        // The where clause
+        query.select(p).where(cb.equal(p.get("id"), id));
+
+        // Directly using query
+        return em.createQuery(query).getResultList();
+
+    }
+
+
+    // TODO: lazy/eager fetch collections, right join
 }
