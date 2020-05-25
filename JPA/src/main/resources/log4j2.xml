@@ -21,9 +21,7 @@
 
     <Loggers>
 <!--        Note: name has to be package which is going to use this logger -->
-        <Logger name="NoelVaes" additivity="true">
-            <appender-ref ref="fileLogger" level="error"/>
-        </Logger>
+        <Logger name="org.hibernate" level="INFO"/>
         <Root level="debug">
             <AppenderRef ref="console" level="info"/>
         </Root>

@@ -19,6 +19,7 @@
         <module>JavaSE</module>
         <module>JPA</module>
         <module>NoelVaes</module>
+        <module>JEE</module>
     </modules>
 
     <dependencyManagement>
