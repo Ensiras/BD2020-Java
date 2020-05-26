@@ -1,10 +1,12 @@
 package basicCRUD.services;
 
 import basicCRUD.domain.Car;
+import basicCRUD.domain.Cars;
 
 import javax.ejb.Stateful;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import static basicCRUD.domain.Values.CARLIST;
 
@@ -17,8 +19,8 @@ public class CarService {
         return carList.get(id);
     }
 
-    public List<Car> getCarList() {
-        return carList;
+    public Cars getCarList() {
+        return Cars.getCars(this.carList);
     }
 
     public Car removeById(int id) {
@@ -33,5 +35,12 @@ public class CarService {
 
     public boolean add(Car car) {
         return carList.add(car);
+    }
+
+    public Cars getByBrand(String brand) {
+        List<Car> carsFiltered = carList.stream()
+                .filter(s -> s.getBrand().toLowerCase().contains(brand.toLowerCase()))
+                .collect(Collectors.toList());
+        return Cars.getCars(carsFiltered);
     }
 }
