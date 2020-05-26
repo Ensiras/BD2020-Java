@@ -1,5 +1,7 @@
 package helloRest.resources;
 
+import io.swagger.annotations.Api;
+
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
@@ -7,6 +9,7 @@ import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.Response;
 
 @Path("helloworld")
+@Api("HelloWorld")
 public class HelloWorldResource {
 
     // Simple get method return just a string (Response obj implicitly created)

@@ -3,14 +3,16 @@ package basicCRUD.resources;
 import basicCRUD.domain.Car;
 import basicCRUD.domain.Cars;
 import basicCRUD.services.CarService;
+import io.swagger.annotations.Api;
 
 import javax.faces.bean.SessionScoped;
 import javax.inject.Inject;
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
-import java.util.List;
+
 
 @Path("cars")
+@Api(value = "cars")
 @Produces(MediaType.APPLICATION_JSON)
 @SessionScoped
 public class CarsResource {
@@ -18,7 +20,6 @@ public class CarsResource {
     @Inject
     CarService carService;
 
-    // TODO: Change so that collection is named in JSON result
     @GET
     public Cars getAll() {
         return carService.getCarList();
