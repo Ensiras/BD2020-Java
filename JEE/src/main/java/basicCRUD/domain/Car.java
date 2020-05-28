@@ -1,16 +1,25 @@
 package basicCRUD.domain;
 
-public class Car {
-    private String brand;
-    private int year;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
 
-    // Note: non-arg ctor needed for converting to json
+/*@Entity*/
+public class Car {
+
+/*    @Id
+    @GeneratedValue*/
+    private int id;
+    private String brand;
+    private String color;
+
+    // Note: non-arg ctor needed for converting to json (and JPA)
     public Car() {
     }
 
-    public Car(String brand, int year) {
+    public Car(String brand, String color) {
         this.brand = brand;
-        this.year = year;
+        this.color = color;
     }
 
     public void setBrand(String brand) {
@@ -22,7 +31,7 @@ public class Car {
         return brand;
     }
 
-    public int getYear() {
-        return year;
+    public String getColor() {
+        return color;
     }
 }

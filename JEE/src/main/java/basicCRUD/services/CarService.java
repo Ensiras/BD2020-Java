@@ -1,22 +1,28 @@
 package basicCRUD.services;
 
+import basicCRUD.Dao.CarDao;
 import basicCRUD.domain.Car;
 import basicCRUD.domain.Cars;
 
-import javax.ejb.Stateful;
+
+import javax.ejb.Stateless;
+import javax.inject.Inject;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import static basicCRUD.domain.Values.CARLIST;
 
-@Stateful // CarService has state
+@Stateless
 public class CarService {
 
-    List<Car> carList = new ArrayList<>(CARLIST);
+
+    @Inject
+    private CarDao carDao;
+
+    List<Car> carList = new ArrayList<>();
 
     public Car getById(int id) {
-        return carList.get(id);
+        return carDao.get(id);
     }
 
     public Cars getCarList() {

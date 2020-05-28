@@ -27,16 +27,16 @@ public class CarsResourceIT {
         return ShrinkWrap.create(WebArchive.class, "test.war")
                 .addClass(App.class)
                 .addPackage(CarsResource.class.getPackage());
-//                .addAsLibraries(assertJ());
+
     }
 
-    private static File[] assertJ() {
+/*    private static File[] assertJ() {
         return Maven.resolver()
                 .loadPomFromFile("pom.xml")
                 .resolve("org.assertj:assertj-core")
                 .withTransitivity()
                 .asFile();
-    }
+    }*/
 
     @Test
     public void getAllTest() {
