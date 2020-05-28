@@ -5,6 +5,13 @@
              http://xmlns.jcp.org/xml/ns/persistence/persistence_2_2.xsd"
              version="2.2">
 
+    <!-- Note changes with application managed per context:
+        - Transaction-type:"JTA"
+        - jta-data-source: jdbc/mySQL. This HAS to correspond with jndiName in server.xml
+        - All database specific information: url, driver, credentials, db name also in server.xml
+        - hibernate.dialect property is entirely new
+        - More config: MySQL-connector has to be accessible for the server (see server.xml comments)
+        -->
     <persistence-unit name="MySQL" transaction-type="JTA">
         <jta-data-source>jdbc/mySQL</jta-data-source>
         <properties>

@@ -15,4 +15,9 @@ public class CarDao {
     public Car get(int id) {
         return em.find(Car.class, id);
     }
+
+    public Car insert(Car car) {
+        em.persist(car);
+        return car;
+    }
 }

@@ -38,8 +38,8 @@ public class CarService {
         return car;
     }
 
-    public boolean add(Car car) {
-        return carList.add(car);
+    public Car add(Car car) {
+        return carDao.insert(car);
     }
 
     public Cars getByBrand(String brand) {

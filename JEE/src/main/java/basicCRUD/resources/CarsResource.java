@@ -38,10 +38,7 @@ public class CarsResource {
     @POST
     @Produces(MediaType.APPLICATION_JSON)
     public Car addCar(Car car) {
-        if (carService.add(car)) {
-            return car;
-        }
-        return null;
+        return carService.add(car);
     }
 
     @DELETE
