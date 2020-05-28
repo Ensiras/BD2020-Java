@@ -26,17 +26,18 @@ public class CarsResourceIT {
     public static Archive<?> createDeployment() {
         return ShrinkWrap.create(WebArchive.class, "test.war")
                 .addClass(App.class)
-                .addPackage(CarsResource.class.getPackage());
+                .addPackage(CarsResource.class.getPackage())
+                .addAsLibraries(assertJ());
 
     }
 
-/*    private static File[] assertJ() {
+    private static File[] assertJ() {
         return Maven.resolver()
                 .loadPomFromFile("pom.xml")
                 .resolve("org.assertj:assertj-core")
                 .withTransitivity()
                 .asFile();
-    }*/
+    }
 
     @Test
     public void getAllTest() {
@@ -47,7 +48,7 @@ public class CarsResourceIT {
 
         System.out.println(message);
 //        assertFalse(message.isEmpty());
-        assertThat(message).contains("Renault");
+        assertThat(message).contains("cars", "[]");
 
     }
 

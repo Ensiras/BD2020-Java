@@ -7,8 +7,8 @@ public class Cars {
 
     List<Car> cars = new ArrayList<>();
 
-//    public Cars() {
-//    }
+    public Cars() {
+    }
 
     private Cars(List<Car> cars) {
         this.cars.addAll(cars);

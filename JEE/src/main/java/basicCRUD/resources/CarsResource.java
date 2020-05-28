@@ -3,18 +3,15 @@ package basicCRUD.resources;
 import basicCRUD.domain.Car;
 import basicCRUD.domain.Cars;
 import basicCRUD.services.CarService;
-import io.swagger.annotations.Api;
 
-import javax.faces.bean.SessionScoped;
 import javax.inject.Inject;
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 
 
 @Path("cars")
-@Api(value = "cars")
+//@Api(value = "cars")
 @Produces(MediaType.APPLICATION_JSON)
-@SessionScoped
 public class CarsResource {
 
     @Inject
