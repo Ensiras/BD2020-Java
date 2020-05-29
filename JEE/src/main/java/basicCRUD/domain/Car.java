@@ -38,4 +38,13 @@ public class Car {
     public int getId() {
         return id;
     }
+
+    @Override
+    public String toString() {
+        return "Car{" +
+                "id=" + id +
+                ", brand='" + brand + '\'' +
+                ", color='" + color + '\'' +
+                '}';
+    }
 }

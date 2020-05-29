@@ -16,6 +16,10 @@ public class CarsResource {
     @Inject
     CarService carService;
 
+    public CarService getCarService() {
+        return carService;
+    }
+
     @GET
     public Car getAll() { // TODO: return a list Cars here instead of just one
         return carService.getCarList();

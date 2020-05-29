@@ -18,6 +18,10 @@ public class CarService {
     @Inject
     private CarDao carDao;
 
+    public CarDao getCarDao() {
+        return carDao;
+    }
+
     List<Car> carList = new ArrayList<>();
 
     public Car getById(int id) {
