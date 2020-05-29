@@ -34,4 +34,8 @@ public class Car {
     public String getColor() {
         return color;
     }
+
+    public int getId() {
+        return id;
+    }
 }

@@ -13,13 +13,13 @@ import org.jboss.shrinkwrap.api.asset.EmptyAsset;
 import org.jboss.shrinkwrap.api.spec.WebArchive;
 import org.jboss.shrinkwrap.resolver.api.maven.Maven;
 import org.junit.Before;
-import org.junit.BeforeClass;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
 import javax.ws.rs.client.ClientBuilder;
+import javax.ws.rs.client.Entity;
 import javax.ws.rs.core.MediaType;
-;
+
 import java.io.File;
 import java.net.URL;
 
@@ -52,12 +52,10 @@ public class CarsResourceIT {
                 .addPackage(Car.class.getPackage())
                 .addAsResource("persistence-test.xml", "META-INF/persistence.xml")
                 .addAsWebInfResource(EmptyAsset.INSTANCE, "beans.xml")
-                .addAsLibraries(assertJ())
-                .addAsLibraries(hibernate()); // create a file of assertJ lib and add it to the .war
+                .addAsLibraries(assertJ()) // create files of assertJ and hibernate libs and add to war
+                .addAsLibraries(hibernate());
         System.out.println(webArchive.toString(true));
         return webArchive;
-
-
     }
 
     // Needed to provide hibernate & assertJ functionality to war
@@ -77,14 +75,32 @@ public class CarsResourceIT {
     }
 
     @Test
-    public void getAllTest() {
+    public void getByIdShouldReturnCarFromDBAsJSON() {
         String message = ClientBuilder.newClient()
-                .target(carsResource)
+                .target(carsResource + "/1")
                 .request(MediaType.APPLICATION_JSON)
                 .get(String.class);
 
         System.out.println(message);
         assertThat(message).contains("Ferrari");
+    }
+
+    @Test
+    public void postCarsShouldStoreInDB() {
+        Car car = new Car("Porsche", "blue");
+        Car response = ClientBuilder.newClient()
+                .target(carsResource)
+                .request(MediaType.APPLICATION_JSON)
+                .post(Entity.json(car), Car.class);
+
+        String message = ClientBuilder.newClient()
+                .target(carsResource + "/" + response.getId())
+                .request(MediaType.APPLICATION_JSON)
+                .get(String.class);
+
+        assertThat(message).contains(String.valueOf(response.getId()),
+                response.getBrand(),
+                response.getColor());
     }
 }
 
