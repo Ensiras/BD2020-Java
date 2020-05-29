@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!-- 'Semi-embedded' version -->
+
+<server description="new server">
+  <!-- Enable features -->
+  <featureManager>
+    <feature>webProfile-7.0</feature>
+    <feature>localConnector-1.0</feature>
+  </featureManager>
+
+  <!--JPA:-->
+  <jpa defaultPersistenceProvider="org.hibernate.jpa.HibernatePersistenceProvider" />
+  <dataSource id="DefaultDataSource" jndiName="jdbc/mySQL" type="javax.sql.XADataSource">
+    <jdbcDriver javax.sql.XADataSource="com.mysql.cj.jdbc.MysqlXADataSource" libraryRef="MySQLLib" />
+    <properties databaseName="car"
+                user="admin" password="testtest"
+                portNumber="3306" serverName="localhost" useSSL="false" />
+  </dataSource>
+
+  <!--  Note change here: pointing towards mysql.jar put into install dir (by Maven) of wlp (in target folder) -->
+  <library id="MySQLLib">
+    <fileset dir="${wlp.install.dir}/usr/shared/resources" includes="mysql.jar"/>
+  </library>
+</server>
+

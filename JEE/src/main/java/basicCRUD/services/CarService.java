@@ -25,6 +25,7 @@ public class CarService {
     }
 
     public Cars getCarList() {
+        carList.add(new Car("Ferrari", "red"));
         return Cars.getCars(this.carList);
     }
 

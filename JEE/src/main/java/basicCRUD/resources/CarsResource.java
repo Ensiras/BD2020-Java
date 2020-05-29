@@ -10,7 +10,6 @@ import javax.ws.rs.core.MediaType;
 
 
 @Path("cars")
-//@Api(value = "cars")
 @Produces(MediaType.APPLICATION_JSON)
 public class CarsResource {
 
