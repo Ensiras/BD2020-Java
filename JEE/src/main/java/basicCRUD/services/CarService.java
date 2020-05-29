@@ -24,9 +24,10 @@ public class CarService {
         return carDao.get(id);
     }
 
-    public Cars getCarList() {
+    // TODO: implement properly to return a list (Cars) of all car entries in DB
+    public Car getCarList() {
         carList.add(new Car("Ferrari", "red"));
-        return Cars.getCars(this.carList);
+        return carDao.get(1);
     }
 
     public Car removeById(int id) {

@@ -17,7 +17,7 @@ public class CarsResource {
     CarService carService;
 
     @GET
-    public Cars getAll() {
+    public Car getAll() { // TODO: return a list Cars here instead of just one
         return carService.getCarList();
     }
 

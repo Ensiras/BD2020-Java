@@ -52,14 +52,15 @@ public class CarsResourceIT {
                 .addPackage(Car.class.getPackage())
                 .addAsResource("persistence-test.xml", "META-INF/persistence.xml")
                 .addAsWebInfResource(EmptyAsset.INSTANCE, "beans.xml")
-                .addAsLibraries(assertJ()); // create a file of assertJ lib and add it to the .war
+                .addAsLibraries(assertJ())
+                .addAsLibraries(hibernate()); // create a file of assertJ lib and add it to the .war
         System.out.println(webArchive.toString(true));
         return webArchive;
 
 
     }
 
-    // Needed to add assertJ 'functionality' to the war
+    // Needed to provide hibernate & assertJ functionality to war
     private static File[] assertJ() {
         return Maven.resolver()
                 .loadPomFromFile("pom.xml")
@@ -68,12 +69,14 @@ public class CarsResourceIT {
                 .asFile();
     }
 
- /*   @Test
-    public void getByIdTest() {
+    private static File[] hibernate() {
+        return Maven.resolver()
+                .loadPomFromFile("pom.xml")
+                .resolve("org.hibernate:hibernate-entitymanager")
+                .withTransitivity().asFile();
+    }
 
-    }*/
-
-        @Test
+    @Test
     public void getAllTest() {
         String message = ClientBuilder.newClient()
                 .target(carsResource)
