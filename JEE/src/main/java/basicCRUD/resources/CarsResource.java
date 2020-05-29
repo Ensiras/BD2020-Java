@@ -56,5 +56,8 @@ public class CarsResource {
         return carService.updateBrand(id, brand);
     }
 
+    public void setCarService(CarService carService) {
+        this.carService = carService;
+    }
 
 }
