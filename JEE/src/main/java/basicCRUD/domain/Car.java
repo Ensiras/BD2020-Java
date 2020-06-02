@@ -1,11 +1,14 @@
 package basicCRUD.domain;
 
+import basicCRUD.util.CarAnno;
+
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 
 @Entity
-public class Car {
+@CarAnno
+public class Car implements Drivable {
 
     @Id
     @GeneratedValue
@@ -46,5 +49,10 @@ public class Car {
                 ", brand='" + brand + '\'' +
                 ", color='" + color + '\'' +
                 '}';
+    }
+
+    @Override
+    public String drive() {
+        return "Driving the car";
     }
 }

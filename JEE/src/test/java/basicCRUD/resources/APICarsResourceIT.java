@@ -1,7 +1,7 @@
 package basicCRUD.resources;
 
 import basicCRUD.App;
-import basicCRUD.Dao.CarDao;
+import basicCRUD.dao.CarDao;
 import basicCRUD.domain.Car;
 import basicCRUD.services.CarService;
 import org.jboss.arquillian.container.test.api.Deployment;
@@ -28,7 +28,6 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 @RunWith(Arquillian.class)
 public class APICarsResourceIT {
-
 
     @ArquillianResource
     private URL deploymentURL;

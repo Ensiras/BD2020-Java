@@ -1,17 +1,15 @@
-package basicCRUD.resources;
+package basicCRUD.producers;
 
-import javax.enterprise.inject.Alternative;
 import javax.enterprise.inject.Produces;
 import javax.inject.Singleton;
 import javax.persistence.EntityManager;
 import javax.persistence.Persistence;
 
 @Singleton
-@Alternative
 public class EntityManagerProducer {
 
     @Produces
-    public static EntityManager h2() {
-        return Persistence.createEntityManagerFactory("h2").createEntityManager();
+    public static EntityManager mysql() {
+        return Persistence.createEntityManagerFactory("MySQL").createEntityManager();
     }
 }

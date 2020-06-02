@@ -1,16 +1,14 @@
-package basicCRUD.Dao;
+package basicCRUD.dao;
 
 import basicCRUD.domain.Car;
 
 import javax.ejb.Stateless;
-import javax.inject.Inject;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 
 @Stateless
 public class CarDao {
 
-/*    @Inject*/
     @PersistenceContext
     EntityManager em;
 
