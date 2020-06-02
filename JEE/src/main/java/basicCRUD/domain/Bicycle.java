@@ -1,10 +1,10 @@
 package basicCRUD.domain;
 
-
 import basicCRUD.util.BicycleAnno;
-
+import javax.enterprise.inject.Default;
 
 @BicycleAnno
+@Default
 public class Bicycle implements Drivable {
 
     @Override

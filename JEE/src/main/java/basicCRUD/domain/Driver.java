@@ -3,7 +3,7 @@ package basicCRUD.domain;
 import basicCRUD.util.BicycleAnno;
 import basicCRUD.util.CarAnno;
 
-import javax.enterprise.inject.Alternative;
+
 import javax.inject.Inject;
 import java.util.ArrayList;
 import java.util.List;
@@ -13,12 +13,15 @@ public class Driver {
     private final List<Drivable> drivables = new ArrayList<>();
 
     @Inject // Field injection
-    @CarAnno
+    @CarAnno // Inject the Drivable with @CarAnno
     private Drivable drivable;
 
     private Drivable drivable2;
 
-    @Inject  // CTOR injection, note annotated parameter
+    @Inject // Inject default Drivable OR alternative if stated
+    private Drivable drivable3;
+
+    @Inject   // CTOR injection, note annotated parameter
     public Driver(@BicycleAnno Drivable d) {
         addDrivable(d);
     }
@@ -37,6 +40,10 @@ public class Driver {
 
     public Drivable getDrivable2() {
         return drivable2;
+    }
+
+    public Drivable getDrivable3() {
+        return drivable3;
     }
 
     @Inject // Setter injection
