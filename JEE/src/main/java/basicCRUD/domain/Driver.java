@@ -5,6 +5,7 @@ import basicCRUD.util.CarAnno;
 
 
 import javax.inject.Inject;
+import javax.inject.Named;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -20,6 +21,9 @@ public class Driver {
 
     @Inject // Inject default Drivable OR alternative if stated
     private Drivable drivable3;
+
+    @Inject
+    private @Named("Boat") Drivable drivable4; // Injecting bean with the name "Boat"
 
     @Inject   // CTOR injection, note annotated parameter
     public Driver(@BicycleAnno Drivable d) {
@@ -53,5 +57,9 @@ public class Driver {
 
     private void addDrivable(Drivable d) {
         drivables.add(d);
+    }
+
+    public Drivable getDrivable4() {
+        return drivable4;
     }
 }

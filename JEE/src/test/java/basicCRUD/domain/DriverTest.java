@@ -38,8 +38,14 @@ class DriverTest {
     }
 
     @Test
-    void whenInitializedDriverDrivable3FieldShouldContainBicycle() {
+    void whenInitializedDriverDrivable3FieldShouldContainMotorcycle() {
         Drivable drivable = driver.getDrivable3();
         assertThat(drivable).isInstanceOf(Motorcycle.class);
+    }
+
+    @Test
+    void whenInitializedDriverDrivable3FieldShouldContainBoat() {
+        Drivable drivable = driver.getDrivable4();
+        assertThat(drivable).isInstanceOf(Boat.class);
     }
 }
