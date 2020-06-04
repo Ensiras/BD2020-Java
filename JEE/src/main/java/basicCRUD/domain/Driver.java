@@ -4,8 +4,12 @@ import basicCRUD.util.BicycleAnno;
 import basicCRUD.util.CarAnno;
 
 
+import javax.enterprise.inject.Any;
+import javax.enterprise.inject.Default;
+import javax.enterprise.inject.Instance;
 import javax.inject.Inject;
 import javax.inject.Named;
+import javax.inject.Provider;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -15,20 +19,28 @@ public class Driver {
 
     @Inject // Field injection
     @CarAnno // Inject the Drivable with @CarAnno
-    private Drivable drivable;
+    private Drivable drivableCar;
 
-    private Drivable drivable2;
+    private Drivable drivableBicycle;
 
-    @Inject // Inject default Drivable OR alternative if stated
-    private Drivable drivable3;
+    @Inject @Default // Inject default Drivable OR alternative if stated
+    private Drivable drivableDefaultExplicit;
 
     @Inject
-    private @Named("Boat") Drivable drivable4; // Injecting bean with the name "Boat"
+    private @Named("Boat")
+    Drivable drivable4; // Injecting bean with the name "Boat"
 
     @Inject   // CTOR injection, note annotated parameter
     public Driver(@BicycleAnno Drivable d) {
         addDrivable(d);
     }
+
+    @Inject
+    @Any
+    Instance<Drivable> allDrivables;
+
+    @Inject
+    Provider<Drivable> singleDrivableProvider; // Drivable will be boat (default)
 
     public String driveAll() {
         StringBuilder message = new StringBuilder();
@@ -38,21 +50,18 @@ public class Driver {
         return message.toString();
     }
 
-    public Drivable getDrivable() {
-        return drivable;
+    public Drivable getDrivableCar() {
+        return drivableCar;
     }
 
-    public Drivable getDrivable2() {
-        return drivable2;
+    public Drivable getDrivableBicycle() {
+        return drivableBicycle;
     }
 
-    public Drivable getDrivable3() {
-        return drivable3;
-    }
 
     @Inject // Setter injection
-    public void setDrivable(@BicycleAnno Drivable drivable) {
-        this.drivable2 = drivable;
+    public void setDrivableBicycle(@BicycleAnno Drivable drivableBicycle) {
+        this.drivableBicycle = drivableBicycle;
     }
 
     private void addDrivable(Drivable d) {
@@ -61,5 +70,9 @@ public class Driver {
 
     public Drivable getDrivable4() {
         return drivable4;
+    }
+
+    public Drivable getDrivableDefaultExplicit() {
+        return drivableDefaultExplicit;
     }
 }
