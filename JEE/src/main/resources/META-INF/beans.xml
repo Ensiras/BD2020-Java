@@ -3,4 +3,7 @@
 <!--    <alternatives>
         <class>basicCRUD.domain.Motorcycle</class>
     </alternatives>-->
+    <interceptors>
+        <class>interceptor.AnnoyingInterceptor</class>
+    </interceptors>
 </beans>
