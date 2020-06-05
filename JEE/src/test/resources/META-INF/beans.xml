@@ -1,1 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans>
+    <!--    <alternatives>
+            <class>basicCRUD.domain.Motorcycle</class>
+        </alternatives>-->
+    <decorators>
+        <class>decorator.CarDecorator</class>
+    </decorators>
+</beans>
 
